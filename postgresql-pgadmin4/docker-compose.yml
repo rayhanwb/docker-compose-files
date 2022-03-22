@@ -1,0 +1,36 @@
+# Credits:
+# https://towardsdatascience.com/how-to-run-postgresql-and-pgadmin-using-docker-3a6a8ae918b5
+# https://stackoverflow.com/questions/24718706/backup-restore-a-dockerized-postgresql-database
+
+version: '3.8'
+services:
+  db:
+    container_name: pg_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: my_db
+    ports:
+      - '5432:5432'
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - '5050:80'
+#http://localhost:5050/
+
+#docker exec -it pg_container bash
+
+#psql -d my_db -U root
+
+# Backup Data
+# docker exec -t pg_container pg_dumpall -c -U root > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+
+# Import Data
+# cat dump_xx-xx-xxxx_xx_xx_xx.sql | docker exec -i pg_container psql -d my_db -U root
